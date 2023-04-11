@@ -6,7 +6,12 @@
 pip install -r requirements.txt
 python chat/manage.py runserver
 ```
-
+Username: admin<br>
+Password: admin<br>
+Username: test1<br>
+Password: test1test1<br>
+Username: test2<br>
+Password: test2test2<br>
 
 </details>
 
