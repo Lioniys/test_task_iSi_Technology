@@ -22,8 +22,9 @@ docker-compose -f docker-compose.prod.yml exec web python src/manage.py createsu
 ![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/3.png)
 ![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/4.png)
 ![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/5.png)
+![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/7.png)
+![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/6.png)
 
 
 </details>
 
-![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/6.png)
