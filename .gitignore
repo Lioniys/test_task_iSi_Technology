@@ -1,4 +1,4 @@
-/.idea
+.idea
 /venv
 /src/db.sqlite3
 /src/media
