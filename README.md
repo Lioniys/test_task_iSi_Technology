@@ -3,11 +3,8 @@
 
 
 ```commandline
-docker-compose -f docker-compose.prod.yml up -d --build
-docker-compose -f docker-compose.prod.yml exec web python src/manage.py makemigrations --noinput
-docker-compose -f docker-compose.prod.yml exec web python src/manage.py migrate --noinput
-docker-compose -f docker-compose.prod.yml exec web python src/manage.py collectstatic --no-input --clear
-docker-compose -f docker-compose.prod.yml exec web python src/manage.py createsuperuser --noinput
+pip install -r requirements.txt
+python chat/manage.py runserver
 ```
 
 
