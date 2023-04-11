@@ -1,4 +1,4 @@
 .idea
 /venv
-/chat/db.sqlite3
+
 /chat/app/migrations
