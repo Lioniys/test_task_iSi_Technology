@@ -31,7 +31,7 @@ class ThreadDestroyView(generics.DestroyAPIView):
     permission_classes = (IsAuthenticated,)
 
 
-class MessageCreateView(generics.ListCreateAPIView):
+class MessageListCreateView(generics.ListCreateAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = (IsAuthenticated,)
