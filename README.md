@@ -15,6 +15,8 @@ docker-compose -f docker-compose.prod.yml exec web python src/manage.py createsu
 
 
 <details><summary> Screenshots :</summary>
+
+
 ![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/1.png)
 ![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/2.png)
 ![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/3.png)
