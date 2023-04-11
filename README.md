@@ -10,4 +10,7 @@ docker-compose -f docker-compose.prod.yml exec web python src/manage.py collects
 docker-compose -f docker-compose.prod.yml exec web python src/manage.py createsuperuser --noinput
 ```
 
+
+</details>
+
 ![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/1.png)
