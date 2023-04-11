@@ -1,5 +1,5 @@
-.idea
+/.idea
 /venv
-/src/db.sqlite3
-/src/media
-/src/store/migrations
+/chat/db.sqlite3
+
+/chat/store/migrations
