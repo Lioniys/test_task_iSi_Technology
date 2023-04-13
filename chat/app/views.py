@@ -2,6 +2,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from .permissions import IsOwner
 from .models import Thread, Message, ThreadUser
 from .serializers import (
     ThreadSerializer,
@@ -10,14 +11,19 @@ from .serializers import (
 )
 
 
+class ThreadDestroyView(generics.DestroyAPIView):
+    queryset = Thread.objects.all()
+    serializer_class = ThreadSerializer
+    permission_classes = (IsAuthenticated,)
+
+
 class ThreadListCreateView(generics.ListCreateAPIView):
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
     permission_classes = (IsAuthenticated,)
 
     def perform_create(self, serializer):
-        user = self.request.user
-        serializer.save(user=user)
+        serializer.save(user=self.request.user)
 
     def get_queryset(self):
         if self.request.method == "POST":
@@ -25,34 +31,32 @@ class ThreadListCreateView(generics.ListCreateAPIView):
         return [x.thread for x in ThreadUser.objects.filter(user=self.request.user)]
 
 
-class ThreadDestroyView(generics.DestroyAPIView):
-    queryset = Thread.objects.all()
-    serializer_class = ThreadSerializer
+class MessageCreateView(generics.CreateAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
     permission_classes = (IsAuthenticated,)
 
 
-class MessageListCreateView(generics.ListCreateAPIView):
+class MessageUpdateIsReadView(generics.UpdateAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageUpdateSerializer
+    permission_classes = (IsOwner,)
+
+
+class CountMessageNotIsReadView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        count = Message.objects.filter(sender=self.request.user, is_read=False).count()
+        return Response({"count": count})
+
+
+class MessagesListInThreadView(generics.ListAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        if self.request.query_params is not None:
-            thread = self.request.query_params.get("thread")
-            return Message.objects.filter(thread=thread)
-        return Message.objects.all()
-
-
-class MessageIsReadView(generics.UpdateAPIView):
-    queryset = Message.objects.all()
-    serializer_class = MessageUpdateSerializer
-    permission_classes = (IsAuthenticated,)
-
-
-class MessageNotIsReadView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
+        thread = self.kwargs.get("pk")
         user = self.request.user
-        count = len(Message.objects.filter(sender=user, is_read=False))
-        return Response({"count": count})
+        return Message.objects.filter(thread=thread, sender=user)

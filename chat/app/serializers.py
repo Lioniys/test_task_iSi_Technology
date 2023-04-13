@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .services import use_limit_participants, valid_thread_exists
+from .services import use_limit_participants, valid_thread_exists, create_thread
 from .models import Thread, Message, ThreadUser
 
 
@@ -15,14 +15,14 @@ class ThreadSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         participants = validated_data.pop('participants')
         user = validated_data.get("user")
+
         use_limit_participants(participants=participants, limit=1)
-        obj = valid_thread_exists(participant=participants[0], user=user)
+        obj = valid_thread_exists(participants=participants, user=user)
+
         if obj is not None:
             return obj
-        obj = Thread.objects.create()
-        ThreadUser.objects.create(user=user, thread=obj)
-        for participant in participants:
-            ThreadUser.objects.create(user=participant.get("user"), thread=obj)
+
+        obj = create_thread(participants=participants, user=user)
         return obj
 
     class Meta:
@@ -35,7 +35,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ['text', 'thread', 'sender']
+        fields = ['text', 'thread', 'sender', 'time_created']
 
 
 class MessageUpdateSerializer(serializers.ModelSerializer):
