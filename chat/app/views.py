@@ -4,12 +4,15 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwner
 from .models import Thread, Message
-from .services import use_limit_participants, valid_thread_exists, get_relevant_serializer
+from .services import (
+    use_limit_participants,
+    valid_thread_exists,
+    get_relevant_serializer
+)
 from .serializers import (
     MessageSerializer,
     ThreadSerializer,
     MessageUpdateSerializer,
-    ThreadCreateSerializer,
 )
 
 
@@ -19,7 +22,7 @@ class ThreadListCreateView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def create(self, request, *args, **kwargs):
-        """Вариант при котором нужно указывать всех пользователей в запросе"""
+        """Вариант при котором нужно передавать всех учасников в запросе"""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         participants = serializer.validated_data.get("participants")

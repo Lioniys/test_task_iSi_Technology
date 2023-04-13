@@ -35,6 +35,7 @@ database – SQLite<br>
 ![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/5.png)
 ![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/7.png)
 ![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/6.png)
+![Image alt](https://github.com/Lioniys/test_task_iSi_Technology/raw/main/screen/0.png)
 </details>
 <details><summary>⏱ Quick start:</summary>
 
