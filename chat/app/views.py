@@ -1,20 +1,16 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwner
-from .models import Thread, Message, ThreadUser
+from .models import Thread, Message
+from .services import use_limit_participants, valid_thread_exists, get_relevant_serializer
 from .serializers import (
-    ThreadSerializer,
     MessageSerializer,
-    MessageUpdateSerializer
+    ThreadSerializer,
+    MessageUpdateSerializer,
+    ThreadCreateSerializer,
 )
-
-
-class ThreadDestroyView(generics.DestroyAPIView):
-    queryset = Thread.objects.all()
-    serializer_class = ThreadSerializer
-    permission_classes = (IsAuthenticated,)
 
 
 class ThreadListCreateView(generics.ListCreateAPIView):
@@ -22,13 +18,28 @@ class ThreadListCreateView(generics.ListCreateAPIView):
     serializer_class = ThreadSerializer
     permission_classes = (IsAuthenticated,)
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def create(self, request, *args, **kwargs):
+        """Вариант при котором нужно указывать всех пользователей в запросе"""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        participants = serializer.validated_data.get("participants")
+
+        use_limit_participants(participants=participants, limit=2)
+        obj = valid_thread_exists(participants=participants)
+        serializer = get_relevant_serializer(participants=participants, obj=obj)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def get_queryset(self):
-        if self.request.method == "POST":
-            return Thread.objects.all()
-        return [x.thread for x in ThreadUser.objects.filter(user=self.request.user)]
+        """Получение списка threads для текущего пользователя"""
+        return self.request.user.threads.all()
+
+
+class ThreadDestroyView(generics.DestroyAPIView):
+    queryset = Thread.objects.all()
+    serializer_class = ThreadSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class MessageCreateView(generics.CreateAPIView):
