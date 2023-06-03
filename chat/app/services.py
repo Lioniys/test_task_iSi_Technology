@@ -4,13 +4,13 @@ from .models import Thread
 
 
 def use_limit_participants(participants: list, limit: int):
-    """Ограничение передаваемых пользователей"""
+    """Limiting transferred users"""
     if len(participants) > limit:
         raise serializers.ValidationError(f"There can only be {limit} participants in the thread")
 
 
 def valid_thread_exists(participants):
-    """Проверка существует ли поток, работает только если учасников двое"""
+    """Checking if there is a thread, works only if there are two participants"""
     if len(participants) == 2:
         user1, user2 = participants
         queryset1 = user1.threads.all()
@@ -21,7 +21,7 @@ def valid_thread_exists(participants):
 
 
 def get_relevant_serializer(participants, obj):
-    """Возвращает сериализатор либо созданого обьекта либо существующего"""
+    """Returns the serializer of either a created object or an existing one"""
     if obj is not None:
         return ThreadSerializer(obj)
     obj = Thread.objects.create()
